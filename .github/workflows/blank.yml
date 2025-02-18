@@ -37,7 +37,7 @@ jobs:
 
     # Passo 6: Armazenar artefato (build) como release do GitHub
     - name: Upload build as GitHub Release Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-artifact
         path: ./build
@@ -72,4 +72,3 @@ jobs:
       run: |
         echo "Aguarde aprovação manual para o deploy"
         sleep 30 # Aguarda 30 segundos para aprovar
-
