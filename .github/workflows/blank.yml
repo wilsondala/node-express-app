@@ -17,11 +17,11 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
 
-    # Passo 2: Configurar Node.js
+    # Passo 2: Configurar Node.js (versão 12)
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '12'  # Altere para a versão do Node que você usa
+        node-version: '12.22.9'  # Altere para a versão 12.22.9 do Node.js
 
     # Passo 3: Instalar as dependências
     - name: Install dependencies
@@ -37,7 +37,7 @@ jobs:
 
     # Passo 6: Armazenar artefato (build) como release do GitHub
     - name: Upload build as GitHub Release Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-artifact
         path: ./build
