@@ -1,0 +1,75 @@
+name: CI/CD for React + TypeScript
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Passo 1: Checar o código
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    # Passo 2: Configurar Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # Altere para a versão do Node que você usa
+
+    # Passo 3: Instalar as dependências
+    - name: Install dependencies
+      run: npm install
+
+    # Passo 4: Executar os testes unitários
+    - name: Run unit tests
+      run: npm run test -- --watch=false --ci --coverage
+
+    # Passo 5: Construir a aplicação
+    - name: Build the app
+      run: npm run build
+
+    # Passo 6: Armazenar artefato (build) como release do GitHub
+    - name: Upload build as GitHub Release Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: ./build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production  # Este nome corresponde ao Environment do GitHub que você configurará
+      url: https://example.com # URL da aplicação em produção (opcional)
+
+    steps:
+    # Passo 1: Checar o código
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    # Passo 2: Baixar artefato de build
+    - name: Download build artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: build-artifact
+
+    # Passo 3: Deploy (exemplo, você pode personalizar conforme sua plataforma)
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment"
+        # Aqui você pode adicionar os comandos para fazer o deploy
+
+    # Passo 4: Aprovação manual (opcional)
+    - name: Manual approval
+      if: success()
+      run: |
+        echo "Aguarde aprovação manual para o deploy"
+        sleep 30 # Aguarda 30 segundos para aprovar
+
